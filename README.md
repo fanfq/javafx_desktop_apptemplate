@@ -71,8 +71,9 @@ mvn package
 为了防止工具被任意分发，可以使用证书加解密功能
 
 * 使用jdk提供的keytool创建keystore文件
+
 ```
-keytool -genkeypair -alias fanfq.github.io -keyalg RSA -keystore RSA_PKCS12_apptemplate.keystore -storetype pkcs12  -validity 1000
+keytool -genkeypair -alias fanfq.github.io -keyalg RSA -keystore RSA_PKCS12.keystore -storetype pkcs12  -validity 1000
 
 
 输入密钥库口令:  12345678
@@ -100,7 +101,7 @@ CN=fanfq.github.io, OU=fanfq.github.io, O=fanfq.github.io, L=fanfq.github.io, ST
 
 ```
  KeyStore ks = KeyStore.getInstance("pkcs12");
-try (FileInputStream in = new FileInputStream("RSA_PKCS12_apptemplate.keystore")) {
+try (FileInputStream in = new FileInputStream("RSA_PKCS12.keystore")) {
     ks.load(in, "12345678".toCharArray());
 
     PrivateKey key = (PrivateKey) ks.getKey("fanfq.github.io", "12345678".toCharArray());
@@ -127,29 +128,39 @@ try (FileInputStream in = new FileInputStream("RSA_PKCS12_apptemplate.keystore")
 JavaFxDelegate类中:
 
 ```
-BootstrapInfo bootstrapInfo = BootstrapInfo.getInstance(); 
-log.info("[bootstrap] ### bootstrapInfo : {}",JSONObject.toJSONString(bootstrapInfo));
+AppInfo appInfo = AppInfo.getInstance(); //new AppInfo("bootstrap.properties");
+log.info("[bootstrap] ### appInfo : {}",JSONObject.toJSONString(appInfo));
+
+
 //URL configUrl = new URL("http://192.168.3.115:8086/app/config.xml");
-URL configUrl = new URL(bootstrapInfo.getUpdUrl());
+URL configUrl = new URL(appInfo.getUpdUrl());
 try (Reader in = new InputStreamReader(configUrl.openStream(), StandardCharsets.UTF_8);
-     InputStream certIn = Files.newInputStream(Paths.get("RSA_PKCS12_apptemplate.keystore"))) {
+     InputStream certIn = Files.newInputStream(Paths.get("RSA_PKCS12.keystore"))) {
     KeyStore ks = KeyStore.getInstance("pkcs12");
     ks.load(certIn, "12345678".toCharArray());
     Certificate certificate = ks.getCertificate("fanfq.github.io");
     PublicKey publicKey = certificate.getPublicKey();
+    //启动模式设置为dev 可选test/dev/prod
+    //Configuration config = Configuration.read(in, publicKey, Map.of("profiles.active", "prod"));
+
     Configuration config = Configuration.read(in, publicKey);
 
-    StartupView startup = new StartupView(config, primaryStage);
+    //StartupView startup = new StartupView(config, primaryStage);
+    SplashView startup = new SplashView(config,primaryStage);
 
     Scene scene = new Scene(startup);
     scene.getStylesheets().add(getClass().getResource("root.css").toExternalForm());
 
-    primaryStage.getIcons().addAll(images);
+    //primaryStage.getIcons().addAll(images);
     primaryStage.setScene(scene);
+    primaryStage.getIcons().add(new Image("icons/icon.png"));
+    primaryStage.setResizable(false);
+    primaryStage.initStyle(StageStyle.UNDECORATED);//设定窗口无边框
 
-    primaryStage.setTitle("Update4j Demo Launcher");
+
+    //primaryStage.setTitle("Update4j Demo Launcher");
     primaryStage.show();
-} catch (IOException e) {
+} catch (Exception e) {
     e.printStackTrace();
     Optional<ButtonType>  buttonType = new Alert(Alert.AlertType.ERROR, "发生错误，请检查配置或者网络", new ButtonType[]{ButtonType.CLOSE}).showAndWait();
     buttonType.ifPresent(buttonType1 -> {
