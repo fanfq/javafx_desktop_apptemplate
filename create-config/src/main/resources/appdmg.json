@@ -1,0 +1,9 @@
+{
+  "title": "${appAlias}",
+  "icon-size": 128,
+  "icon": "icon.icns",
+  "contents": [
+    { "x": 140, "y": 200, "type": "file", "path": "${appAlias}-bootstrap.app" },
+    { "x": 370, "y": 200, "type": "link", "path": "/Applications" }
+  ]
+}

@@ -1,6 +1,6 @@
-#javafx_desktop_apptemplate
+# javafx_desktop_apptemplate
 
-jdk11 + javafx + update4j + javapackage + LogBack + lombok
+mvn + jdk11 + javafx + update4j + javapackage + LogBack + lombok
 
 安装[inno setup6](https://jrsoftware.org/isdl.php), 并加入到path中，用于制作windows安装程序(最好下载最新版本)
 为了“iscc”这个命令行能够执行
@@ -8,7 +8,7 @@ jdk11 + javafx + update4j + javapackage + LogBack + lombok
 安装[WiX Toolset](https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm), 并将bin目录加入到path中，用于创建Windows安装包。
 为了“candle”和"light"两个命令行能够执行
 
-macos操作系统安装包需要安装[xcode]。
+macOS操作系统安装包需要安装[Xcode](https://apps.apple.com/cn/app/xcode/id497799835?mt=12)。
 
 关于[JavaPackager](https://github.com/fvarrui/JavaPackager) 更多配置可参考其github
 

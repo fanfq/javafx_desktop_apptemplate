@@ -1,4 +1,0 @@
-# 测试环境
-spring:
-  application:
-    name: javafx demo test

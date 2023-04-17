@@ -3,20 +3,39 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>javafx-test-with-javapackager</artifactId>
-        <groupId>com.jonesun</groupId>
+        <groupId>com.elseplus</groupId>
+        <artifactId>apptemplate</artifactId>
         <version>1.0.0</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>create-config</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.elseplus</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
     <build>
+
+        <!--app.version=${project.version} 赋值-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>create-config</id>
@@ -28,7 +47,7 @@
                 </executions>
                 <configuration>
                     <includeProjectDependencies>true</includeProjectDependencies>
-                    <mainClass>com.jonesun.createconfig.CreateConfig</mainClass>
+                    <mainClass>com.elseplus.createconfig.CreateConfig</mainClass>
                     <systemProperties>
                         <systemProperty>
                             <key>maven.dir</key>
